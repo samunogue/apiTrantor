@@ -1,40 +1,40 @@
-import pratos_bd  from "../models/ComidaModel.js";
+import livros_bd  from "../models/LivrosModel.js";
 
-class ComidaController{
-        static listarComidas = (req, res) =>{
-                pratos_bd.find((error, comida) =>{
+class LivroController{
+        static ListarLivros = (req, res) =>{
+                livros_bd.find((error, livro) =>{
                         if(error) res.status(404).send({message: error})
-                        res.status(200).send(comida)
+                        res.status(200).send(livro)
                 })
         }
-        static BuscarComidaPorId = (req, res) =>{
+        static BuscarLivroPorId = (req, res) =>{
                 const id = req.params.id
-                pratos_bd.findById(id, (error, comida) =>{
-                        if(error) res.status(400).send({mensagem:"Comida não encontrada"})
-                        res.status(200).send(comida)
+                livros_bd.findById(id, (error, livro) =>{
+                        if(error) res.status(400).send({mensagem:"LIvro não encontrado"})
+                        res.status(200).send(livro)
                 })
         }
-        static AdicionarComida = (req, res) =>{
-                const comida = new pratos_bd(req.body)
-                comida.save((error) =>{
+        static AdicionarLivro = (req, res) =>{
+                const livro = new livros_bd(req.body)
+                livro.save((error) =>{
                         if(error) res.status(500).send({message: error.message})
-                        res.status(201).json(comida)
+                        res.status(201).json(livro)
                 } )
         }
-        static EditarComida = (req, res) =>{
+        static EditarLivro = (req, res) =>{
                 const id = req.params.id
-                pratos_bd.findByIdAndUpdate(id, {$set : req.body},  (error) => {
+                livros_bd.findByIdAndUpdate(id, {$set : req.body},  (error) => {
                         if(error) res.status(500).send({message: error.message})
-                        res.status(200).send({message:"Comida atualizado com sucesso"})
+                        res.status(200).send({message:"Livro atualizado com sucesso"})
                 }) 
         }
-        static ExcluirComida = (req, res) =>{
+        static ExcluirLivro = (req, res) =>{
                 const id = req.params.id
-                pratos_bd.findByIdAndDelete(id, (error) =>{
+                livros_bd.findByIdAndDelete(id, (error) =>{
                         if(error){
                                 res.status(400).send({message: error.message})
                         }else{
-                                res.status(200).send({message: "Comida removida com sucesso"})
+                                res.status(200).send({message: "Livro removido com sucesso"})
                         }
                 })
 
@@ -90,4 +90,4 @@ class ComidaController{
 //                 })
 //         }
 // }
-export default ComidaController
+export default LivroController

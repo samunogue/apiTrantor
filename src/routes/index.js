@@ -1,6 +1,7 @@
 import express from "express";
-import comidaRotas from "./ComidasRoutes.js"
+import livrosRotas from "./LivrosRoutes.js"
 import usersRotas from "./UsersRoutes.js"
+import pagesRotas from "../routes/PagesRoutes.js"
 
 const routes = (app) =>{
         app.route('/').get((req, res) =>{
@@ -8,8 +9,9 @@ const routes = (app) =>{
         })
         app.use(
                 express.json(),
-                comidaRotas,
-                usersRotas
+                livrosRotas,
+                usersRotas,
+                pagesRotas
         )
 }
 export default routes
