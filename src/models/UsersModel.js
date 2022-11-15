@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema(
         login:{type: String, required:true},
         senha:{type:String, required:true},
         favoritos:{type:Array},
-        CPF:{type:Number, required:true},
+        CPF:{type:String, required:true},
         }
 )
 const users_bd = mongoose.model('users', UserSchema)
