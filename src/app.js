@@ -11,10 +11,8 @@ db.once("open", ()=> {
 
 const app = express();
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
-    app.use(cors_func());
     app.use(express.json()) 
+    app.use(cors_func());
     next();
 });
 routes(app)
