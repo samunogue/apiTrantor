@@ -5,6 +5,7 @@ const LivroSchema = new mongoose.Schema(
         titulo: {type: String, required: true},
         autor: {type: String, required:true},
         genero: {type: String, required:true},
+        url:{type:String, required:true},
         numPaginas:{type:String, required:true}
         }
 )
