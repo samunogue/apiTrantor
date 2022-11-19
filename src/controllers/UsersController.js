@@ -2,7 +2,7 @@ import users_bd from "../models/UsersModel.js"
 import livros_bd from "../models/LivrosModel.js"
 import jsonwebtoken from "jsonwebtoken"
 class UsersController{
-        static CadastrarUsuario = (req, res) =>{
+        static CadastrarUsuario = async (req, res) =>{
                 const {CPF} = req.body
                 const user = await users_bd.find({CPF: CPF})
                  .then(response =>{
