@@ -1,16 +1,22 @@
 import users_bd from "../models/UsersModel.js"
 import livros_bd from "../models/LivrosModel.js"
-
+import jsonwebtoken from "jsonwebtoken"
 class UsersController{
         static CadastrarUsuario = (req, res) =>{
-                const user = new users_bd(req.body)
-                user.save((error) =>{
-                        if(error) {
-                                res.status(500).send({message: error.message})
-                        }else{
-                                res.status(201).send({message: "Usuario cadastrado com sucesso"})
-                        }
-                } )
+                const {CPF} = req.body
+                const user = await users_bd.find({CPF: CPF})
+                 .then(response =>{
+                         return response
+                 }).catch(erro =>{
+                         return ({error: erro})
+                 })
+                if(user.erro) res.status(401).send({message:"Erro ao fazer cadastro"})
+
+                if(user == "" || user == null ){
+                        res.status(200).send({message:"Cadastro feito com sucesso"})
+                }else{
+                        res.status(401).send({message:"Usuario Ja existe"})
+                }
         }
         static Login = async (req, res) =>{
                 const {login} = req.body
@@ -24,7 +30,10 @@ class UsersController{
                 if(user == "" || user.erro ){
                         res.status(401).send({message:"Usuario não encontrado"})
                 }else{
-                        res.status(200).send({message:"Login feito com sucesso"})
+                        const token = jsonwebtoken.sign( {user} , process.env.CHAVE, {
+                                expiresIn: 600 
+                              });
+                        res.status(200).send({message:"Login feito com sucesso", token: token})
                 }
         }
         static FavoritarLivro = async (req, res) =>{
