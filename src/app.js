@@ -2,6 +2,7 @@ import express from "express";
 import db from "./config/db_connect.js";
 import routes from "./routes/index.js";
 import cors from "cors";
+import bodyParser from 'body-parser'
 const cors_func = cors()
 
 db.on("error", console.log.bind(console, "erro de conexão"));
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
                 "Access-Control-Allow-Methods",
                 "POST, PUT, PATCH, GET, DELETE"
               )
+    app.use(bodyParser.json())    
     app.use(express.json()) 
     next();
 });
