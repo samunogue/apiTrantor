@@ -4,6 +4,7 @@ import jsonwebtoken from "jsonwebtoken"
 class UsersController{
         static CadastrarUsuario = async (req, res) =>{
                 const {CPF} = req.body
+                const user_novo = new users_bd(req.body)
                 const user = await users_bd.find({CPF: CPF})
                  .then(response =>{
                          return response
@@ -13,7 +14,10 @@ class UsersController{
                 if(user.erro) res.status(401).send({message:"Erro ao fazer cadastro"})
 
                 if(user == "" || user == null ){
-                        res.status(200).send({message:"Cadastro feito com sucesso"})
+                        user_novo.save((error) =>{
+                                if(error) res.status(500).send({message: error.message})
+                                res.status(201).json(user_novo)
+                        }) 
                 }else{
                         res.status(401).send({message:"Usuario Ja existe"})
                 }
