@@ -4,7 +4,7 @@ class UserController{
         static buscarUser = (req, res) =>{
                 const {id} = req.params
                 users_bd.findById(id, (error, user) =>{
-                        if(error) res.status(400).send({mensagem:"User não encontrado"})
+                        if(error) res.status(200).send({mensagem:"User não encontrado"})
                         res.status(200).send(user)
                 })
         }
