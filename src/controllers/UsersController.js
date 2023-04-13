@@ -1,75 +1,117 @@
-import users_bd from "../models/UsersModel.js"
-import livros_bd from "../models/LivrosModel.js"
-import jsonwebtoken from "jsonwebtoken"
-class UsersController{
-        static CadastrarUsuario = async (req, res) =>{
-                const {CPF} = req.body
-                const user_novo = new users_bd(req.body)
-                const user = await users_bd.find({CPF: CPF})
-                 .then(response =>{
-                         return response
-                 }).catch(erro =>{
-                         return ({error: erro})
-                 })
-                if(user.erro) res.status(401).send({message:"Erro ao fazer cadastro"})
+import users_bd  from "../models/UsersModel.js";
 
-                if(user == "" || user == null ){
-                        user_novo.save((error) =>{
-                                if(error) res.status(500).send({message: error.message})
-                                res.status(201).json(user_novo)
-                        }) 
-                }else{
-                        res.status(401).send({message:"Usuario Ja existe"})
-                }
+class UserController{
+        static buscarUser = (req, res) =>{
+                const {id} = req.params
+                users_bd.findById(id, (error, user) =>{
+                        if(error) res.status(400).send({mensagem:"User não encontrado"})
+                        res.status(200).send(user)
+                })
         }
-        static Login = async (req, res) =>{
-                const {login} = req.body
-                const {senha} = req.body
-                const user = await users_bd.find({login, senha})
-                 .then(response =>{
-                         return response
-                 }).catch(erro =>{
-                         return ({error: erro})
-                 })
-                if(user == "" || user.erro ){
-                        res.status(401).send({message:"Usuario não encontrado"})
-                }else{
-                        const token = jsonwebtoken.sign( {user} , process.env.CHAVE, {
-                                expiresIn: 600 
-                              });
-                        res.status(200).send({message:"Login feito com sucesso", token: token})
-                }
+        static cadastrarUser = (req,res) =>{
+                const user = new users_bd(req.body)
+                user.save((error) =>{
+                        if(error) res.status(500).send({message: error.message})
+                        res.status(201).send(user)
+                })
         }
-        static FavoritarLivro = async (req, res) =>{
-                const {CPF} = req.body
-                const nome_livro = req.body.livro
-                livros_bd.find({titulo:nome_livro}, (error, livro) =>{
-                        if(error) {
-                                res.status(400).send({mensagem:"LIvro não encontrado"})
-                        }else{
-                                const query = {CPF:CPF}
-                                users_bd.findOneAndUpdate(query, { $push : { favoritos: livro }}, (error)=>{
-                                        if(error){
-                                                res.status(400).send({message:"Usuario não encontrado"})
-                                        }else{
-                                                res.status(200).send({message: "Livro adicionado aos favoritos"})
-                                        }
-                                })
+        static editarSenhaUser = async (req, res) =>{
+                const idDoUsuario = req.params.id
+                const usuario = await users_bd.findById(idDoUsuario)
+                if(req.body.CPF == usuario.CPF && req.body.login == usuario.login ){
+                        usuario.senha = req.body.senha
+                        usuario.save((err, doc) => {
+                                if (err) {
+                                        res.status(400).send({message:err})
+                                } else {
+                                        res.status(201).send({message:"Reunião adicionada com sucesso"})
+                                }
+                        })
+                }else{
+                        res.status(401).send({message:"CPF ou login inválidos"})
+                }       
+        }
+        static adicionarCard = async (req, res) =>{
+                const idDoUsuario = req.params.id
+                const cardNovo = req.body
+                const usuario = await users_bd.findById(idDoUsuario)
+                usuario.kanban.push(cardNovo)
+                usuario.save((err, doc) => {
+                        if (err) {
+                                res.status(400).send({message:err})
+                        } else {
+                                res.status(201).send({message:"Reunião adicionada com sucesso"})
                         }
                 })
-                
         }
-        static RedefinirSenha = (req, res) =>{
-                const {CPF} = req.body
-                const {senha } = req.body
-                const query = {CPF: CPF}
-                users_bd.findOneAndUpdate(query, { $set: { senha: senha }}, (error)=>{
-                        if(error){
-                                res.status(400).send({message:"Usuario não encontrado"})
-                        }else{
-                                res.status(200).send({message: "Senha alterada com sucesso"})
+        static editarCard = async (req, res) =>{
+                const idDoUsuario = req.params.id
+                const cardEditado = req.body
+                const usuario = await users_bd.findById(idDoUsuario)
+                const idCard = req.body.idCard
+                const indexCard = usuario.reunioes.findIndex(card => card._id === idCard)
+                usuario.kanban[indexCard] = cardEditado
+                usuario.save((err, doc) => {
+                        if (err) {
+                                res.status(400).send({message:err})
+                        } else {
+                                res.status(201).send({message:"Reunião adicionada com sucesso"})
+                        }
+                })
+        }
+        static excluirCard = async (req, res) =>{
+                const idDoUsuario = req.params.id
+                const idCard = req.body.idCard
+                const usuario = await users_bd.findById(idDoUsuario)
+                usuario.kanban = usuario.kanban.filter(kanban => kanban._id !== idCard)
+                usuario.save((err, doc) => {
+                        if (err) {
+                                res.status(400).send({message:err})
+                        } else {
+                                res.status(201).send({message:"Card excluido com sucesso"})
+                        }
+                })
+        }
+        static adicionarReuniao = async (req,res) =>{
+                const idDoUsuario = req.params.id
+                const reuniaoNova = req.body
+                const usuario = await users_bd.findById(idDoUsuario)
+                usuario.reunioes.push(reuniaoNova)
+                usuario.save((err, doc) => {
+                        if (err) {
+                                res.status(400).send({message:err})
+                        } else {
+                                res.status(201).send({message:"Reunião adicionada com sucesso"})
+                        }
+                })
+        }
+        static editarReuniao = async (req, res) =>{
+                const idDoUsuario = req.params.id
+                const reuniaoEditada = req.body
+                const idReuniao = req.body.idReuniao
+                const usuario = await users_bd.findById(idDoUsuario)
+                const indexReuniao = usuario.reunioes.findIndex(reuniao => reuniao._id === idReuniao)
+                usuario.reunioes[indexReuniao] = reuniaoEditada
+                usuario.save((err, doc) => {
+                        if (err) {
+                                res.status(400).send({message:err})
+                        } else {
+                                res.status(201).send({message:"Reunião editada com sucesso"})
+                        }
+                })
+        }
+        static deletarReuniao = async (req, res) =>{
+                const idDoUsuario = req.params.id
+                const idReuniao = req.body.idReuniao
+                const usuario = await users_bd.findById(idDoUsuario)
+                usuario.reunioes = usuario.reunioes.filter(reuniao => reuniao._id !== idReuniao)
+                usuario.save((err, doc) => {
+                        if (err) {
+                                res.status(400).send({message:err})
+                        } else {
+                                res.status(201).send({message:"Reunião excluida com sucesso"})
                         }
                 })
         }
 }
-export default UsersController
+export default UserController

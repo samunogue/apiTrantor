@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
 
-const {DB_USER,DB_PASSWORD} = process.env
-mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@bd-biblioteca.hdntswf.mongodb.net/BD-BIBLIOTECA`);
-
-
+mongoose.connect(`mongodb+srv://SYSDBA:1234@bd-api-web.xij2bbx.mongodb.net/`);
 
 let db = mongoose.connection;
 export default db;   

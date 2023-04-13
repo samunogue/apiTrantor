@@ -4,8 +4,23 @@ const UserSchema = new mongoose.Schema(
         id:{type:String},
         login:{type: String, required:true},
         senha:{type:String, required:true},
-        favoritos:{type:Array},
         CPF:{type:String, required:true},
+        kanban:[
+                {
+                        titulo:{type: String},
+                        tasks:[]
+                }
+        ],
+        reunioes:[
+                {
+                        titulo:{type: String},
+                        tipo:{type: String},
+                        descricao:{type: String},
+                        pessoas:[],
+                        data:{type: String},
+                        duracao:{type: String}
+                }
+        ]
         }
 )
 const users_bd = mongoose.model('users', UserSchema)
