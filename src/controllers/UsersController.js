@@ -73,7 +73,7 @@ class UserController{
                 const idDoUsuario = req.params.id
                 const idCard = req.body.idCard
                 const usuario = await users_bd.findById(idDoUsuario)
-                usuario.kanban = usuario.kanban.filter(kanban => kanban._id !== idCard)
+                usuario.kanban = usuario.kanban.filter(kanban => kanban._id != idCard)
                 usuario.save((err, doc) => {
                         if (err) {
                                 res.status(400).send({message:err})
