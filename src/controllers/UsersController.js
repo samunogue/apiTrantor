@@ -11,11 +11,11 @@ class UserController{
         static login = async (req, res) =>{
                 const login = req.body.login
                 const senha = req.body.senha
-                const usuario = await users_bd.findOne({ login: login })
+                const usuario = await users_bd.findOne({ login: login, auth:true})
                 if(usuario.senha == senha){
                         res.status(200).send(usuario)
                 }else{
-                        res.status(404).send({message:"Usuario não encontrado"})
+                        res.status(404).send({message:"Usuario não encontrado", auth:false})
                 }
         }
         static cadastrarUser = (req,res) =>{
