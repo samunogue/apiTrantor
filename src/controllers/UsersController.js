@@ -8,6 +8,16 @@ class UserController{
                         res.status(200).send(user)
                 })
         }
+        static login = async (req, res) =>{
+                const login = req.body.login
+                const senha = req.body.senha
+                const usuario = await users_bd.findOne({ login: login })
+                if(usuario.senha == senha){
+                        res.status(200).send(usuario)
+                }else{
+                        res.status(404).send({message:"Usuario não encontrado"})
+                }
+        }
         static cadastrarUser = (req,res) =>{
                 const user = new users_bd(req.body)
                 user.save((error) =>{

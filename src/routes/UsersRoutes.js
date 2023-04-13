@@ -6,6 +6,7 @@ const router = express.Router();
 router
         .get('/v1/users/:id', UsersController.buscarUser)
         .post('/v1/users', UsersController.cadastrarUser)
+        .post('/v1/login', UsersController.login)
         .post('/v1/adicionarkanban/:id', UsersController.adicionarCard)
         .put('/v1/editarkanban/:id', UsersController.editarCard)
         .delete('/v1/excluircard/:id', UsersController.excluirCard)
