@@ -34,7 +34,7 @@ class UserController{
                                 if (err) {
                                         res.status(400).send({message:err})
                                 } else {
-                                        res.status(201).send({message:"Reunião adicionada com sucesso"})
+                                        res.status(201).send({message:"Senha Alterada com sucesso"})
                                 }
                         })
                 }else{
@@ -50,7 +50,7 @@ class UserController{
                         if (err) {
                                 res.status(400).send({message:err})
                         } else {
-                                res.status(201).send({message:"Reunião adicionada com sucesso"})
+                                res.status(201).send({message:"Card adicionado com sucesso"})
                         }
                 })
         }
@@ -65,7 +65,7 @@ class UserController{
                         if (err) {
                                 res.status(400).send({message:err})
                         } else {
-                                res.status(201).send({message:"Reunião adicionada com sucesso"})
+                                res.status(201).send({message:"Card editado com sucesso"})
                         }
                 })
         }
@@ -106,7 +106,7 @@ class UserController{
                         if (err) {
                                 res.status(400).send({message:err})
                         } else {
-                                res.status(201).send({message:"Reunião editada com sucesso"})
+                                res.status(200).send({message:"Reunião editada com sucesso"})
                         }
                 })
         }
@@ -119,7 +119,7 @@ class UserController{
                         if (err) {
                                 res.status(400).send({message:err})
                         } else {
-                                res.status(201).send({message:"Reunião excluida com sucesso"})
+                                res.status(200).send({message:"Reunião excluida com sucesso"})
                         }
                 })
         }
