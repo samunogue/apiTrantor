@@ -56,10 +56,10 @@ class UserController{
         }
         static editarCard = async (req, res) =>{
                 const idDoUsuario = req.params.id
-                const cardEditado = req.body
+                const cardEditado = req.body.card
                 const usuario = await users_bd.findById(idDoUsuario)
                 const idCard = req.body.idCard
-                const indexCard = usuario.reunioes.findIndex(card => card._id === idCard)
+                const indexCard = usuario.kanban.findIndex(card => card._id == idCard)
                 usuario.kanban[indexCard] = cardEditado
                 usuario.save((err, doc) => {
                         if (err) {
@@ -73,7 +73,7 @@ class UserController{
                 const idDoUsuario = req.params.id
                 const idCard = req.body.idCard
                 const usuario = await users_bd.findById(idDoUsuario)
-                usuario.kanban = usuario.kanban.filter(kanban => kanban._id !== idCard)
+                usuario.kanban = usuario.kanban.filter(kanban => kanban._id != idCard)
                 usuario.save((err, doc) => {
                         if (err) {
                                 res.status(400).send({message:err})
@@ -97,10 +97,10 @@ class UserController{
         }
         static editarReuniao = async (req, res) =>{
                 const idDoUsuario = req.params.id
-                const reuniaoEditada = req.body
+                const reuniaoEditada = req.body.reuniao
                 const idReuniao = req.body.idReuniao
                 const usuario = await users_bd.findById(idDoUsuario)
-                const indexReuniao = usuario.reunioes.findIndex(reuniao => reuniao._id === idReuniao)
+                const indexReuniao = usuario.reunioes.findIndex(reuniao => reuniao._id == idReuniao)
                 usuario.reunioes[indexReuniao] = reuniaoEditada
                 usuario.save((err, doc) => {
                         if (err) {
@@ -114,7 +114,7 @@ class UserController{
                 const idDoUsuario = req.params.id
                 const idReuniao = req.body.idReuniao
                 const usuario = await users_bd.findById(idDoUsuario)
-                usuario.reunioes = usuario.reunioes.filter(reuniao => reuniao._id !== idReuniao)
+                usuario.reunioes = usuario.reunioes.filter(reuniao => reuniao._id != idReuniao)
                 usuario.save((err, doc) => {
                         if (err) {
                                 res.status(400).send({message:err})

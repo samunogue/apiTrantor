@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema(
                         descricao:{type: String},
                         pessoas:[],
                         data:{type: String},
-                        duracao:{type: String}
+                        lider:{type: String}                        
                 }
         ]
         }
