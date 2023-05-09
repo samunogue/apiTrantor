@@ -3,7 +3,6 @@ import db from "./config/db_connect.js";
 import routes from "./routes/index.js";
 import cors from "cors";
 import bodyParser from 'body-parser'
-const cors_func = cors()
 
 db.on("error", console.log.bind(console, "erro de conexão"));
 db.once("open", ()=> {
@@ -11,20 +10,30 @@ db.once("open", ()=> {
 }); 
 
 const app = express();
+
+app.options("*", cors({
+        optionsSuccessStatus: 200,
+        preflightContinue: true,
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE"]
+}));
+
+app.use(bodyParser.json());    
+app.use(express.json()); 
+
 app.use((req, res, next) => {
-        res.header("Access-Control-Allow-Origin", "*")
-        res.header(
-          "Access-Control-Allow-Headers",
-          "Origin, X-Requested, Content-Type, Accept, token"
-        )
-        res.header(
-                "Access-Control-Allow-Methods",
-                "POST, PUT, PATCH, GET, DELETE"
-              )
-    app.use(bodyParser.json())    
-    app.use(express.json()) 
-    next();
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested, Content-Type, Accept, token"
+  )
+  res.header(
+    "Access-Control-Allow-Methods",
+    "POST, PUT, PATCH, GET, DELETE"
+  )
+  next();
 });
-routes(app)
+
+routes(app);
 
 export default app;
